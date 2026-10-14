@@ -1,0 +1,6 @@
+{
+  "name": "تكه | استوديو التصميم والسوشيال ميديا",
+  "description": "منصة تكه لخدمات التصميم الاحترافي، إدارة السوشيال ميديا، الموشن جرافيك، وهوية المطاعم والكافيهات بفخامة وسرعة.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
