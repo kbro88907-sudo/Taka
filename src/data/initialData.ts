@@ -136,12 +136,17 @@ export const INITIAL_SERVICES: ServiceItem[] = [
   },
 ];
 
+import menuImg from '../assets/images/portfolio_restaurant_menu_1791997543674.jpg';
+import socialImg from '../assets/images/portfolio_social_campaign_1791997543320.jpg';
+import brandImg from '../assets/images/portfolio_brand_identity_1791997543883.jpg';
+import heroImg from '../assets/images/takka_hero_creative_1791997542444.jpg';
+
 export const INITIAL_PORTFOLIO: PortfolioItem[] = [
   {
     id: 'port-1',
     title: 'هوية وقائمة طعام مطعم الديوان الفاخر',
     category: 'restaurants',
-    image: '/src/assets/images/portfolio_restaurant_menu_1791997543674.jpg',
+    image: menuImg,
     client: 'مطعم الديوان - القاهرة',
     description: 'تصميم منيو فاخر مطبوع بحواف حجرية وكتابة ذهبية بارزة مع تنظيم محكم للأطباق أدى لزيادة مبيعات أطباق الشيف بنسبة 35%.',
     tags: ['تصميم منيو', 'هوية بصرية', 'طباعة فاخرة'],
@@ -151,7 +156,7 @@ export const INITIAL_PORTFOLIO: PortfolioItem[] = [
     id: 'port-2',
     title: 'حملة إعلانية وسوشيال ميديا لمطاعم Flame & Juice',
     category: 'social',
-    image: '/src/assets/images/portfolio_social_campaign_1791997543320.jpg',
+    image: socialImg,
     client: 'سلسلة برجر Flame Bites',
     description: 'تصاميم إعلانية وريلز ثلاثية بمؤثرات نيون وموشن جرافيك سريع حققت أكثر من 1.2 مليون مشاهدة و+420 طلب دليفري في أسبوعين.',
     tags: ['ريلز', 'سوشيال ميديا', 'إعلانات ممولة'],
@@ -161,7 +166,7 @@ export const INITIAL_PORTFOLIO: PortfolioItem[] = [
     id: 'port-3',
     title: 'الهوية المتكاملة لكافيه AURA Specialty Coffee',
     category: 'branding',
-    image: '/src/assets/images/portfolio_brand_identity_1791997543883.jpg',
+    image: brandImg,
     client: 'أورا كافيه - التجمع الخامس',
     description: 'شعار مطرز بلمسات الذهب المطفي، أكواب سوداء أنيقة، كروت طاولة خشبية بباركود QR، وباقات تسويق افتتاحي مكتملة.',
     tags: ['هوية كافيهات', 'QR منيو', 'تغليف Packaging'],
@@ -171,7 +176,7 @@ export const INITIAL_PORTFOLIO: PortfolioItem[] = [
     id: 'port-4',
     title: 'استوديو حملات وتصاميم تكه الإبداعية',
     category: 'social',
-    image: '/src/assets/images/takka_hero_creative_1791997542444.jpg',
+    image: heroImg,
     client: 'وكالة تسويق رقمي & تجزئة',
     description: 'حملة محتوى رقمي لشاشات التفاعل وتيك توك ريلز ساهمت في تصدر التريند وزيادة المتابعين بنسبة 210%.',
     tags: ['موشن جرافيك', 'تيك توك', 'إدارة محتوى'],

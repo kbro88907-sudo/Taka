@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { PricingPackage, SpecialOffer, Announcement, PortfolioItem } from '../types';
+import defaultMenuImg from '../assets/images/portfolio_restaurant_menu_1791997543674.jpg';
 
 export const AdminModal: React.FC = () => {
   const {
@@ -84,7 +85,7 @@ export const AdminModal: React.FC = () => {
   }>({
     title: '',
     category: 'restaurants',
-    image: '/src/assets/images/portfolio_restaurant_menu_1791997543674.jpg',
+    image: defaultMenuImg,
     client: '',
     description: '',
     tags: 'منيو, تصميم فاخر',

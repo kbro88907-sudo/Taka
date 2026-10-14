@@ -53,19 +53,51 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const STORAGE_KEYS = {
-  PACKAGES: 'takka_packages_v1',
-  OFFERS: 'takka_offers_v1',
-  ANNOUNCEMENTS: 'takka_announcements_v1',
-  PORTFOLIO: 'takka_portfolio_v1',
-  AUTH: 'takka_admin_auth_v1',
+  PACKAGES: 'takka_packages_v2',
+  OFFERS: 'takka_offers_v2',
+  ANNOUNCEMENTS: 'takka_announcements_v2',
+  PORTFOLIO: 'takka_portfolio_v2',
+  AUTH: 'takka_admin_auth_v2',
 };
 
 const ADMIN_PASSWORD = '8889384444';
 
+// Safe storage access that never crashes in strict environments or sandboxes
+const safeGetItem = (key: string): string | null => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.localStorage.getItem(key);
+    }
+  } catch {
+    // Storage access denied or blocked
+  }
+  return null;
+};
+
+const safeSetItem = (key: string, value: string): void => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(key, value);
+    }
+  } catch {
+    // Storage access denied or blocked
+  }
+};
+
+const safeRemoveItem = (key: string): void => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.removeItem(key);
+    }
+  } catch {
+    // Storage access denied or blocked
+  }
+};
+
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [packages, setPackages] = useState<PricingPackage[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.PACKAGES);
+      const saved = safeGetItem(STORAGE_KEYS.PACKAGES);
       return saved ? JSON.parse(saved) : INITIAL_PACKAGES;
     } catch {
       return INITIAL_PACKAGES;
@@ -74,7 +106,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [offers, setOffers] = useState<SpecialOffer[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.OFFERS);
+      const saved = safeGetItem(STORAGE_KEYS.OFFERS);
       return saved ? JSON.parse(saved) : INITIAL_OFFERS;
     } catch {
       return INITIAL_OFFERS;
@@ -83,7 +115,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [announcements, setAnnouncements] = useState<Announcement[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.ANNOUNCEMENTS);
+      const saved = safeGetItem(STORAGE_KEYS.ANNOUNCEMENTS);
       return saved ? JSON.parse(saved) : INITIAL_ANNOUNCEMENTS;
     } catch {
       return INITIAL_ANNOUNCEMENTS;
@@ -92,7 +124,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.PORTFOLIO);
+      const saved = safeGetItem(STORAGE_KEYS.PORTFOLIO);
       return saved ? JSON.parse(saved) : INITIAL_PORTFOLIO;
     } catch {
       return INITIAL_PORTFOLIO;
@@ -103,7 +135,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return localStorage.getItem(STORAGE_KEYS.AUTH) === 'true';
+    try {
+      return safeGetItem(STORAGE_KEYS.AUTH) === 'true';
+    } catch {
+      return false;
+    }
   });
 
   const [toast, setToast] = useState<ToastState | null>(null);
@@ -115,21 +151,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }, 3500);
   };
 
-  // Sync state to localStorage
+  // Sync state to safe storage
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.PACKAGES, JSON.stringify(packages));
+    try {
+      safeSetItem(STORAGE_KEYS.PACKAGES, JSON.stringify(packages));
+    } catch {
+      // ignore
+    }
   }, [packages]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.OFFERS, JSON.stringify(offers));
+    try {
+      safeSetItem(STORAGE_KEYS.OFFERS, JSON.stringify(offers));
+    } catch {
+      // ignore
+    }
   }, [offers]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.ANNOUNCEMENTS, JSON.stringify(announcements));
+    try {
+      safeSetItem(STORAGE_KEYS.ANNOUNCEMENTS, JSON.stringify(announcements));
+    } catch {
+      // ignore
+    }
   }, [announcements]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.PORTFOLIO, JSON.stringify(portfolio));
+    try {
+      safeSetItem(STORAGE_KEYS.PORTFOLIO, JSON.stringify(portfolio));
+    } catch {
+      // ignore
+    }
   }, [portfolio]);
 
   const updatePackage = (updatedPkg: PricingPackage) => {
@@ -194,7 +246,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const loginAdmin = (password: string): boolean => {
     if (password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
-      localStorage.setItem(STORAGE_KEYS.AUTH, 'true');
+      safeSetItem(STORAGE_KEYS.AUTH, 'true');
       showToast('مرحباً بك في لوحة تحكم تكه', 'success');
       return true;
     }
@@ -204,7 +256,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const logoutAdmin = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem(STORAGE_KEYS.AUTH);
+    safeRemoveItem(STORAGE_KEYS.AUTH);
     showToast('تم تسجيل الخروج من لوحة التحكم', 'info');
   };
 
